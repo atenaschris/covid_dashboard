@@ -17,31 +17,38 @@
 </head>
 
 <body>
+   <div class="container py-5">
+           <div class="row">
+               <div class="col-12">
+                   <p class="h2">Dati aggiornati al: <span id="data" ></span></p>
+               </div>
+           </div>
+    </div>
  
-    <div class="container my-5 py-5">
+    <div class="container  py-3">
         <div class="row">
             <div class="col-12 col-md-3 mb-3">
                 <div class="card-custom d-flex flex-column h-100">
-                    <p class="h4 mb-5">Lorem</p>
-                    <p class="h2 mb-0 text-end mt-auto">Ipsum</p>
+                    <p class="h4 mb-5">Casi Totali</p>
+                    <p id="totalCases" class="h2 mb-0 text-end mt-auto text-main"></p>
                 </div>
             </div>
             <div class="col-12 col-md-3 mb-3">
                 <div class="card-custom d-flex flex-column h-100">
-                    <p class="h4 mb-5">Lorem</p>
-                    <p class="h2 mb-0 text-end mt-auto">Ipsum</p>
+                    <p class="h4 mb-5">Guariti Totali</p>
+                    <p id="totalRecovered" class="h2 mb-0 text-end mt-auto text-main"></p>
                 </div>
             </div>
             <div class="col-12 col-md-3 mb-3">
                 <div class="card-custom d-flex flex-column h-100">
-                    <p class="h4 mb-5">Lorem</p>
-                    <p class="h2 mb-0 text-end mt-auto">Ipsum</p>
+                    <p class="h4 mb-5">Morti Totali</p>
+                    <p id="totalDeath" class="h2 mb-0 text-end mt-auto text-main"></p>
                 </div>
             </div>
             <div class="col-12 col-md-3 mb-3">
                 <div class="card-custom d-flex flex-column h-100">
-                    <p class="h4 mb-5">Lorem</p>
-                    <p class="h2 mb-0 text-end mt-auto">Ipsum</p>
+                    <p class="h4 mb-5">Attuali</p>
+                    <p id="positive" class="h2 mb-0 text-end mt-auto text-main"></p>
                 </div>
             </div>
         </div>
@@ -162,6 +169,44 @@
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
     </script>
     <link rel="stylesheet" href="scripts.js">
+<script>
+    fetch('https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json')
+    .then(response=>response.json())
+    .then(dati=>{
+
+        //ordino dati, più recenti per primmi
+        let sorted = dati.reverse();
+        //ultima data caricata
+        let lastUpdated = sorted[0].data;
+
+        //formattazione per mostrare data di ultimo update
+        let lastUpdatedFormatted = lastUpdated.split("T")[0].split("-").reverse().join("/");
+        //visualizzazione frontend della data dell'ultimo update
+        document.querySelector('#data').innerHTML = lastUpdatedFormatted;
+        //mi prendo tutte le ultime 21 regioni ordinate per numero di positivi discendente
+       let lastUpdatedData = sorted.filter(el=>el.data == lastUpdated).sort((a,b)=> b.nuovi_positivi - a.nuovi_positivi);
+       //calcolo casi totali di tutte le 21 regioni
+       let TotalCases = lastUpdatedData.map(el=>el.totale_casi).reduce((t,n)=>t+n);
+       //visualizzazione frontend dei casi totali 
+      document.querySelector('#totalCases').innerHTML = TotalCases;
+       //calcolo totali guariti delle 21 regioni
+       let totalRecovered = lastUpdatedData.map(el=>el.dimessi_guariti).reduce((t,n)=>t+n);
+       //visualizzazione frontend di tutti i guariti
+       document.querySelector('#totalRecovered') .innerHTML = totalRecovered;
+       console.log(lastUpdatedData);
+       //calcolo totale deceduti delle  21 regioni
+       let totalDeath = lastUpdatedData.map(el=>el.deceduti).reduce((t,n)=>t+n);
+       //visualizzazione frontend detotale deceduti
+       document.querySelector('#totalDeath').innerHTML= totalDeath;
+       //calcolo attualmente positivi delle 21 regioni
+
+       let positive = lastUpdatedData.map(el=>el.totale_positivi).reduce((t,n)=>t+n);
+
+       document.querySelector('#positive').innerHTML = positive;
+       
+       
+    });
+</script>
 </body>
 
 </html>
