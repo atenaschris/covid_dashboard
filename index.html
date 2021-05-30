@@ -61,54 +61,9 @@
             </div>
             <div class="col-12 col-lg-6 scrollable">
                 <div id="progressWrapper" class="row p-3">
-                    <div class="col-12 mt-5">
-                        <p class="mb-0">Descrizione</p>
-                        <div class="progress rounded-0">
-                            <div class="progress-bar bg-main" style="width: 54%;">
 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 mt-5">
-                        <p class="mb-0">Descrizione</p>
-                        <div class="progress rounded-0">
-                            <div class="progress-bar bg-main" style="width: 54%;">
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 mt-5">
-                        <p class="mb-0">Descrizione</p>
-                        <div class="progress rounded-0">
-                            <div class="progress-bar bg-main" style="width: 54%;">
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 mt-5">
-                        <p class="mb-0">Descrizione</p>
-                        <div class="progress rounded-0">
-                            <div class="progress-bar bg-main" style="width: 54%;">
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 mt-5">
-                        <p class="mb-0">Descrizione</p>
-                        <div class="progress rounded-0">
-                            <div class="progress-bar bg-main" style="width: 54%;">
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 mt-5">
-                        <p class="mb-0">Descrizione</p>
-                        <div class="progress rounded-0">
-                            <div class="progress-bar bg-main" style="width: 54%;">
-
-                            </div>
-                        </div>
-                    </div>
+                  
+         
                 </div>
 
             </div>
@@ -156,8 +111,14 @@
 
         //visualizzazione frontend degli attualmente positivi
        document.querySelector('#positive').innerHTML = positive;
+       //seleziono il wrapper delle card della singola regione
         let cardWrapper = document.querySelector('#cardWrapper')
-        //foreach dinamico delle card
+        //seleziono il wrapper che contiene le progress bar
+        let progressWrapper = document.querySelector('#progressWrapper');
+        //calcolare il massimo numero dei nuovi positivi ottenuti giorno per giorno
+        let todayMax = Math.max(...lastUpdatedData.map(el=>el.nuovi_positivi));
+        console.log(todayMax);
+        //foreach dinamico delle card e delle progress bar
        lastUpdatedData.forEach(el=>{
             let div=document.createElement('div');
             div.classList.add('col-12','col-md-6','my-4');
@@ -168,8 +129,22 @@
             </div>
             
             `
+            let div2 = document.createElement('div');
+            div2.classList.add('col-12','mt-5');
+            div2.innerHTML = `
+            <p class="mb-0">${el.denominazione_regione}: ${el.nuovi_positivi}</p>
+                <div class="progress rounded-0">
+                    <div class="progress-bar bg-main" style="width: ${100 * el.nuovi_positivi /todayMax}%;">
+
+                    </div>
+                </div>
+            
+            `
         cardWrapper.appendChild(div);   
+        progressWrapper.appendChild(div2);
+
        });
+
        
        
     });
