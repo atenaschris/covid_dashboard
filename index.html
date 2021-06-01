@@ -14,13 +14,20 @@
     <link rel="stylesheet" href="styles.css">
 
     <title>Hello, world!</title>
+ 
 </head>
 
 <body>
-   <div class="container py-5">
+    <!-- modal -->
+    <div class="modal-custom modal-custompoiner">
+        <div class="modal-custom-content">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dignissimos fuga, eum debitis doloremque ratione non ex quasi saepe quo amet cumque sed magnam totam praesentium provident veritatis veniam unde?
+        </div>
+    </div>
+     <div class="container py-5">
            <div class="row">
                <div class="col-12">
-                   <p class="h2">Dati aggiornati al: <span id="data" ></span></p>
+                   <p class="h2">Dati aggiornati al: <span id="data"></span></p>
                </div>
            </div>
     </div>
@@ -95,7 +102,7 @@
        //calcolo casi totali di tutte le 21 regioni
        let TotalCases = lastUpdatedData.map(el=>el.totale_casi).reduce((t,n)=>t+n);
        //visualizzazione frontend dei casi totali 
-      document.querySelector('#totalCases').innerHTML = TotalCases;
+        document.querySelector('#totalCases').innerHTML = TotalCases;
        //calcolo totali guariti delle 21 regioni
        let totalRecovered = lastUpdatedData.map(el=>el.dimessi_guariti).reduce((t,n)=>t+n);
        //visualizzazione frontend di tutti i guariti
@@ -117,13 +124,13 @@
         let progressWrapper = document.querySelector('#progressWrapper');
         //calcolare il massimo numero dei nuovi positivi ottenuti giorno per giorno
         let todayMax = Math.max(...lastUpdatedData.map(el=>el.nuovi_positivi));
-        console.log(todayMax);
+        
         //foreach dinamico delle card e delle progress bar
        lastUpdatedData.forEach(el=>{
             let div=document.createElement('div');
             div.classList.add('col-12','col-md-6','my-4');
             div.innerHTML = `
-            <div class="card-custom p-3-pb-0 h-100">
+            <div class="card-custom p-3-pb-0 h-100" data-region=${el.denominazione_regione}>
                 <p>${el.denominazione_regione}</p>
                 <p class="text-end h5 mb-0 text-main">${el.nuovi_positivi}</p>
             </div>
@@ -145,9 +152,52 @@
 
        });
 
+       //dopo aver creato il css delle nostre modali, selezioniamo i div delle modali
+    let modal = document.querySelector('.modal-custom')
+    let modalContent = document.querySelector('.modal-custom-content')
+
+    //al click su una di quelle card si apre la modale:
+
+  document.querySelectorAll('[data-region').forEach(el=>{
+      el.addEventListener('click',()=>{
+        let region = el.dataset.region;
+        modal.classList.add('active');
+        modal.classList.remove('modal-custompoiner');
+        
+        let dataAboutRegion = lastUpdatedData.filter(el=>el.denominazione_regione == region)[0];
+        
+        modalContent.innerHTML = `
        
-       
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <p class="lead text-main">Totale casi: ${dataAboutRegion.denominazione_regione}</p>
+                    </div>
+                    <div class="col-12">
+                    <p class="lead text-main">Totale casi: ${dataAboutRegion.totale_casi}</p>
+                    <p class="lead">Nuovi positivi: ${dataAboutRegion.nuovi_positivi}</p>
+                    <p class="lead">Deceduti: ${dataAboutRegion.deceduti}</p>
+                    <p class="lead">Guariti: ${dataAboutRegion.dimessi_guariti}</p>
+                    <p class="lead">Ricoverati con sintomi: ${dataAboutRegion.ricoverati_con_sintomi}</p>
+                </div>    
+            </div>
+        </div>
+        `
+      });
     });
+    
+    
+    window.addEventListener('click',function(e){
+      if(e.target == modal){
+         /*  modal.style.removeProperty('pointer-events'); */
+
+          modal.classList.remove('active');
+          modal.classList.add('modal-custompoiner');
+      }
+           
+    });
+});
+
 </script>
 </body>
 
