@@ -46,7 +46,6 @@ body{
     opacity: 0;
     width: 100%;
     height: 100%;
-    padding-top: 20%;
     background-color:rgba(0,0,0,0.5);
     transition: 0.2s; 
     border-radius: 10px;  
@@ -61,9 +60,75 @@ body{
     margin: auto;
     width: 70%;
     padding: 30px;
+    
 }
 
 .modal-custom.active{
     z-index: 10;
     opacity: 1;
+    overflow-y: scroll;
 }
+
+.pin-new{
+    border-right: 2px solid rgba(0,0,255,0.2);
+    position: relative;
+    width: 5px;
+    margin-right: 1px;
+}
+
+.pin-new::after{
+    position: absolute;
+    content: "";
+    top:0px;
+    right: -3px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: blue;
+}
+
+.pin-death{
+    border-right:2px solid rgba(255,0,0,0.2);
+    position: relative;
+    width: 5px;
+    margin-right: 1px;
+
+}
+.pin-death::after{
+    position: absolute;
+    content: "";
+    top:0px;
+    right:-3px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: red;
+}
+.pin-recovered{
+    border-right:2px solid rgba(0,255,0,0.2);
+    position: relative;
+    width: 5px;
+    margin-right: 1px;
+
+}
+.pin-recovered::after{
+    position: absolute;
+    content: "";
+    top:0px;
+    right:-3px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: green;
+}
+
+.plot{
+    height: 200px;
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: scroll;
+}
+
+
+
+

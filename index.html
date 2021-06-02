@@ -76,6 +76,16 @@
             </div>
         </div>
     </div>
+    <!-- <div class="container my-5 py-5">
+        <div class="row">
+            <div class="col-12">
+                <div id="trendNew" class="d-flex align-items-end border border-dark" style="height: 400px;" ></div>
+            </div>
+            <div class="col-12-pin-new">
+                
+            </div>
+        </div>
+    </div> -->
 
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
@@ -88,7 +98,7 @@
     .then(response=>response.json())
     .then(dati=>{
 
-        //ordino dati, più recenti per primmi
+        //ordino dati, più recenti per primi
         let sorted = dati.reverse();
         //ultima data caricata
         let lastUpdated = sorted[0].data;
@@ -172,17 +182,64 @@
             <div class="row">
                 <div class="col-12">
                     <p class="lead text-main">Totale casi: ${dataAboutRegion.denominazione_regione}</p>
-                    </div>
-                    <div class="col-12">
-                    <p class="lead text-main">Totale casi: ${dataAboutRegion.totale_casi}</p>
+                </div>
+                <div class="col-12">
+                    <p class="lead">Totale casi: ${dataAboutRegion.totale_casi}</p>
                     <p class="lead">Nuovi positivi: ${dataAboutRegion.nuovi_positivi}</p>
                     <p class="lead">Deceduti: ${dataAboutRegion.deceduti}</p>
                     <p class="lead">Guariti: ${dataAboutRegion.dimessi_guariti}</p>
                     <p class="lead">Ricoverati con sintomi: ${dataAboutRegion.ricoverati_con_sintomi}</p>
                 </div>    
             </div>
+            <div class="row">
+                <div class="col-12">
+                    <p class="mb-0 mt-5 text-main">Trend Nuovi Casi</p>
+                    <div id="trendNew" class="d-flex align-items-end plot"></div>
+                </div>
+                <div class="col-12">
+                    <p class="mb-0 mt-5 text-main">Trend Decessi</p>
+                    <div id="trendDeath" class="d-flex align-items-end plot"></div>
+                </div>
+                <div class="col-12">
+                    <p class="mb-0 mt-5 text-main">Trend Guariti</p>
+                    <div id="trendRecovered" class="d-flex align-items-end plot"></div>
+                </div>
+            </div>
         </div>
         `
+        
+        let trendData= sorted.map(el=>el).reverse().filter(el=>el.denominazione_regione==region).map(el=>[el.data,el.nuovi_positivi,el.deceduti,el.dimessi_guariti]);
+        
+      
+        
+        let maxNew = Math.max(...trendData.map(el=>el[1]));
+        let maxDeath = Math.max(...trendData.map(el=>el[2]));
+        let maxRecovered= Math.max(...trendData.map(el=>el[3]));
+
+         let trendNew = document.querySelector('#trendNew');
+         let trendDeath = document.querySelector('#trendDeath');
+         let trendRecovered = document.querySelector('#trendRecovered');
+        
+        trendData.forEach(el=>{
+            let divNew = document.createElement('div');
+            divNew.classList.add('d-inline-block','pin-new');
+            divNew.style.height=`${100*el[1]/maxNew}%`
+            trendNew.appendChild(divNew);
+
+            let divDeath = document.createElement('div');
+            divDeath.classList.add('d-inline-block','pin-death');
+            divDeath.style.height=`${100*el[2]/maxDeath}%`;
+            trendDeath.appendChild(divDeath);
+
+            let divRecovered = document.createElement('div');
+            divRecovered.classList.add('d-inline-block','pin-recovered');
+            divRecovered.style.height=`${100*el[2]/100}%`;
+            trendRecovered.appendChild(divRecovered);
+
+        })
+
+
+
       });
     });
     
@@ -196,7 +253,8 @@
       }
            
     });
-});
+
+ });
 
 </script>
 </body>
