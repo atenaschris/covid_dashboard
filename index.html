@@ -21,7 +21,7 @@
     <!-- modal -->
     <div class="modal-custom modal-custompoiner">
         <div class="modal-custom-content">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dignissimos fuga, eum debitis doloremque ratione non ex quasi saepe quo amet cumque sed magnam totam praesentium provident veritatis veniam unde?
+           
         </div>
     </div>
      <div class="container py-5">
@@ -35,25 +35,25 @@
     <div class="container py-3">
         <div class="row">
             <div class="col-12 col-md-3 mb-3">
-                <div class="card-custom d-flex flex-column h-100">
+                <div class="card-custom d-flex flex-column h-100" data-trend="totale_casi">
                     <p class="h4 mb-5">Casi Totali</p>
                     <p id="totalCases" class="h2 mb-0 text-end mt-auto text-main"></p>
                 </div>
             </div>
             <div class="col-12 col-md-3 mb-3">
-                <div class="card-custom d-flex flex-column h-100">
+                <div class="card-custom d-flex flex-column h-100" data-trend="dimessi_guariti">
                     <p class="h4 mb-5">Guariti Totali</p>
                     <p id="totalRecovered" class="h2 mb-0 text-end mt-auto text-main"></p>
                 </div>
             </div>
             <div class="col-12 col-md-3 mb-3">
-                <div class="card-custom d-flex flex-column h-100">
+                <div class="card-custom d-flex flex-column h-100" data-trend="deceduti">
                     <p class="h4 mb-5">Morti Totali</p>
                     <p id="totalDeath" class="h2 mb-0 text-end mt-auto text-main"></p>
                 </div>
             </div>
             <div class="col-12 col-md-3 mb-3">
-                <div class="card-custom d-flex flex-column h-100">
+                <div class="card-custom d-flex flex-column h-100" data-trend="totale_positivi">
                     <p class="h4 mb-5">Attuali</p>
                     <p id="positive" class="h2 mb-0 text-end mt-auto text-main"></p>
                 </div>
@@ -76,16 +76,8 @@
             </div>
         </div>
     </div>
-    <!-- <div class="container my-5 py-5">
-        <div class="row">
-            <div class="col-12">
-                <div id="trendNew" class="d-flex align-items-end border border-dark" style="height: 400px;" ></div>
-            </div>
-            <div class="col-12-pin-new">
-                
-            </div>
-        </div>
-    </div> -->
+    
+    
 
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
@@ -102,7 +94,6 @@
         let sorted = dati.reverse();
         //ultima data caricata
         let lastUpdated = sorted[0].data;
-
         //formattazione per mostrare data di ultimo update
         let lastUpdatedFormatted = lastUpdated.split("T")[0].split("-").reverse().join("/");
         //visualizzazione frontend della data dell'ultimo update
@@ -181,27 +172,27 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <p class="lead text-main">Totale casi: ${dataAboutRegion.denominazione_regione}</p>
+                    <p class="lead text-main fw-bold">Totale casi: ${dataAboutRegion.denominazione_regione}</p>
                 </div>
-                <div class="col-12">
-                    <p class="lead">Totale casi: ${dataAboutRegion.totale_casi}</p>
-                    <p class="lead">Nuovi positivi: ${dataAboutRegion.nuovi_positivi}</p>
-                    <p class="lead">Deceduti: ${dataAboutRegion.deceduti}</p>
-                    <p class="lead">Guariti: ${dataAboutRegion.dimessi_guariti}</p>
-                    <p class="lead">Ricoverati con sintomi: ${dataAboutRegion.ricoverati_con_sintomi}</p>
+                <div class="col-6 text-center offset-3 d-inline-block">
+                    <p class="lead ">Totale casi: ${dataAboutRegion.totale_casi}</p>
+                    <p class="lead ">Nuovi positivi: ${dataAboutRegion.nuovi_positivi}</p>
+                    <p class="lead ">Deceduti: ${dataAboutRegion.deceduti}</p>
+                    <p class="lead ">Guariti: ${dataAboutRegion.dimessi_guariti}</p>
+                    <p class="lead ">Ricoverati con sintomi: ${dataAboutRegion.ricoverati_con_sintomi}</p>
                 </div>    
             </div>
             <div class="row">
                 <div class="col-12">
-                    <p class="mb-0 mt-5 text-main">Trend Nuovi Casi</p>
+                    <p class="mb-0 mt-5 text-main fw-bold">Trend Nuovi Casi</p>
                     <div id="trendNew" class="d-flex align-items-end plot"></div>
                 </div>
                 <div class="col-12">
-                    <p class="mb-0 mt-5 text-main">Trend Decessi</p>
+                    <p class="mb-0 mt-5 text-main fw-bold">Trend Decessi</p>
                     <div id="trendDeath" class="d-flex align-items-end plot"></div>
                 </div>
                 <div class="col-12">
-                    <p class="mb-0 mt-5 text-main">Trend Guariti</p>
+                    <p class="mb-0 mt-5 text-main fw-bold">Trend Guariti</p>
                     <div id="trendRecovered" class="d-flex align-items-end plot"></div>
                 </div>
             </div>
@@ -254,6 +245,76 @@
            
     });
 
+    
+    let days= Array.from(new Set(sorted.map(el=>el.data))).reverse()
+
+    document.querySelectorAll('[data-trend').forEach(el=>{
+        el.addEventListener('click',()=>{
+           let set = el.dataset.trend;    
+        let totalsPerDays = days.map(el=>[el,sorted.filter(i=>i.data ==el).map(u=>u[set]).reduce((t,n)=>t+n)])
+        let maxData = Math.max(...totalsPerDays.map(el=>el[1]));
+        modal.classList.add('active');
+        modal.classList.remove('modal-custompoiner');
+        modalContent.innerHTML = `
+       
+        <div class="container my-5 py-5">
+            <div class="row">
+                <div class="col-12">
+                    <p class="lead text-main">${set.replace(/_/g," ").toUpperCase()}</p>
+                </div>
+                <div class="col-12">
+                    <div id="totalTrend" class="d-flex align-items-end plot">
+             
+                    </div>
+                </div>
+            </div>
+        </div>
+       `
+
+       let totalTrend = document.querySelector('#totalTrend');
+      
+      
+     
+       
+      totalsPerDays.forEach(el=>{
+          let col = document.createElement('div');
+          col.classList.add('d-inline-block','pin-new');
+          col.style.height=`${70*el[1]/maxData}%`
+          totalTrend.appendChild(col);
+      })
+
+
+       })
+    })
+
+
+   /*  document.querySelector('#timeTotal').addEventListener('click',()=>{
+    
+      
+        
+
+        modal.classList.add('active');
+        modal.classList.remove('modal-custompoiner');
+        modalContent.innerHTML = `
+       
+        <div class="container my-5 py-5">
+            <div class="row">
+                <div class="col-12">
+                    <div id="totalTrend" class="d-flex align-items-end plot">
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+       `
+      
+ 
+       
+    })*/
+
+
+
+   
  });
 
 </script>
