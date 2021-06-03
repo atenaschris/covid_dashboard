@@ -5,33 +5,41 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Electrolize&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    
+</body>
 
-    <title>Hello, world!</title>
- 
+<title>Hello, world!</title>
+
 </head>
 
 <body>
     <!-- modal -->
     <div class="modal-custom modal-custompoiner">
         <div class="modal-custom-content">
-           
+            
         </div>
     </div>
-     <div class="container py-5">
-           <div class="row">
-               <div class="col-12">
-                   <p class="h2">Dati aggiornati al: <span id="data"></span></p>
-               </div>
-           </div>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <p class="h2">Dati aggiornati al: <span id="data"></span></p>
+            </div>
+            <div class="col-12 col-md-6">
+                <button class="btn btn-circle " id="pieTrigger">Pie</button>
+                <button class="btn btn-circle ms-2" id="mapTrigger">Map
+                </button>
+                
+            </div>
+        </div>
     </div>
- <!-- First Section -->
+    <!-- First Section -->
     <div class="container py-3">
         <div class="row">
             <div class="col-12 col-md-3 mb-3">
@@ -60,7 +68,7 @@
             </div>
         </div>
     </div>
-<!-- Second Section -->
+    <!-- Second Section -->
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-6 scrollable">
@@ -68,28 +76,28 @@
             </div>
             <div class="col-12 col-lg-6 scrollable">
                 <div id="progressWrapper" class="row p-3">
-
-                  
-         
+                    
+                    
+                    
                 </div>
-
+                
             </div>
         </div>
     </div>
     
     
-
-
+    
+    
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
-    </script>
-    <link rel="stylesheet" href="scripts.js">
+    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
+</script>
+<link rel="stylesheet" href="scripts.js">
 <script>
     fetch('https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json')
     .then(response=>response.json())
     .then(dati=>{
-
+        
         //ordino dati, più recenti per primi
         let sorted = dati.reverse();
         //ultima data caricata
@@ -99,27 +107,27 @@
         //visualizzazione frontend della data dell'ultimo update
         document.querySelector('#data').innerHTML = lastUpdatedFormatted;
         //mi prendo tutte le ultime 21 regioni ordinate per numero di positivi discendente
-       let lastUpdatedData = sorted.filter(el=>el.data == lastUpdated).sort((a,b)=> b.nuovi_positivi - a.nuovi_positivi);
-       //calcolo casi totali di tutte le 21 regioni
-       let TotalCases = lastUpdatedData.map(el=>el.totale_casi).reduce((t,n)=>t+n);
-       //visualizzazione frontend dei casi totali 
+        let lastUpdatedData = sorted.filter(el=>el.data == lastUpdated).sort((a,b)=> b.nuovi_positivi - a.nuovi_positivi);
+        //calcolo casi totali di tutte le 21 regioni
+        let TotalCases = lastUpdatedData.map(el=>el.totale_casi).reduce((t,n)=>t+n);
+        //visualizzazione frontend dei casi totali 
         document.querySelector('#totalCases').innerHTML = TotalCases;
-       //calcolo totali guariti delle 21 regioni
-       let totalRecovered = lastUpdatedData.map(el=>el.dimessi_guariti).reduce((t,n)=>t+n);
-       //visualizzazione frontend di tutti i guariti
-       document.querySelector('#totalRecovered') .innerHTML = totalRecovered;
-       console.log(lastUpdatedData);
-       //calcolo totale deceduti delle  21 regioni
-       let totalDeath = lastUpdatedData.map(el=>el.deceduti).reduce((t,n)=>t+n);
-       //visualizzazione frontend detotale deceduti
-       document.querySelector('#totalDeath').innerHTML= totalDeath;
-       //calcolo attualmente positivi delle 21 regioni
-
-       let positive = lastUpdatedData.map(el=>el.totale_positivi).reduce((t,n)=>t+n);
-
+        //calcolo totali guariti delle 21 regioni
+        let totalRecovered = lastUpdatedData.map(el=>el.dimessi_guariti).reduce((t,n)=>t+n);
+        //visualizzazione frontend di tutti i guariti
+        document.querySelector('#totalRecovered') .innerHTML = totalRecovered;
+        console.log(lastUpdatedData);
+        //calcolo totale deceduti delle  21 regioni
+        let totalDeath = lastUpdatedData.map(el=>el.deceduti).reduce((t,n)=>t+n);
+        //visualizzazione frontend detotale deceduti
+        document.querySelector('#totalDeath').innerHTML= totalDeath;
+        //calcolo attualmente positivi delle 21 regioni
+        
+        let positive = lastUpdatedData.map(el=>el.totale_positivi).reduce((t,n)=>t+n);
+        
         //visualizzazione frontend degli attualmente positivi
-       document.querySelector('#positive').innerHTML = positive;
-       //seleziono il wrapper delle card della singola regione
+        document.querySelector('#positive').innerHTML = positive;
+        //seleziono il wrapper delle card della singola regione
         let cardWrapper = document.querySelector('#cardWrapper')
         //seleziono il wrapper che contiene le progress bar
         let progressWrapper = document.querySelector('#progressWrapper');
@@ -127,7 +135,7 @@
         let todayMax = Math.max(...lastUpdatedData.map(el=>el.nuovi_positivi));
         
         //foreach dinamico delle card e delle progress bar
-       lastUpdatedData.forEach(el=>{
+        lastUpdatedData.forEach(el=>{
             let div=document.createElement('div');
             div.classList.add('col-12','col-md-6','my-4');
             div.innerHTML = `
@@ -141,183 +149,231 @@
             div2.classList.add('col-12','mt-5');
             div2.innerHTML = `
             <p class="mb-0">${el.denominazione_regione}: ${el.nuovi_positivi}</p>
-                <div class="progress rounded-0">
-                    <div class="progress-bar bg-main" style="width: ${100 * el.nuovi_positivi /todayMax}%;">
-
-                    </div>
+            <div class="progress rounded-0">
+                <div class="progress-bar bg-main" style="width: ${100 * el.nuovi_positivi /todayMax}%;">
+                    
                 </div>
+            </div>
             
             `
-        cardWrapper.appendChild(div);   
-        progressWrapper.appendChild(div2);
-
-       });
-
-       //dopo aver creato il css delle nostre modali, selezioniamo i div delle modali
-    let modal = document.querySelector('.modal-custom')
-    let modalContent = document.querySelector('.modal-custom-content')
-
-    //al click su una di quelle card si apre la modale:
-
-  document.querySelectorAll('[data-region').forEach(el=>{
-      el.addEventListener('click',()=>{
-        let region = el.dataset.region;
-        modal.classList.add('active');
-        modal.classList.remove('modal-custompoiner');
+            cardWrapper.appendChild(div);   
+            progressWrapper.appendChild(div2);
+            
+        });
         
-        let dataAboutRegion = lastUpdatedData.filter(el=>el.denominazione_regione == region)[0];
+        //dopo aver creato il css delle nostre modali, selezioniamo i div delle modali
+        let modal = document.querySelector('.modal-custom')
+        let modalContent = document.querySelector('.modal-custom-content')
         
-        modalContent.innerHTML = `
-       
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <p class="lead text-main fw-bold">Totale casi: ${dataAboutRegion.denominazione_regione}</p>
+        //al click su una di quelle card si apre la modale:
+        
+        document.querySelectorAll('[data-region').forEach(el=>{
+            el.addEventListener('click',()=>{
+                let region = el.dataset.region;
+                modal.classList.add('active');
+                modal.classList.remove('modal-custompoiner');
+                
+                let dataAboutRegion = lastUpdatedData.filter(el=>el.denominazione_regione == region)[0];
+                
+                modal.innerHTML = `
+                
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <p class="lead text-main fw-bold">Totale casi: ${dataAboutRegion.denominazione_regione}</p>
+                        </div>
+                        <div class="col-6 text-center offset-3 d-inline-block">
+                            <p class="lead text-white ">Totale casi: ${dataAboutRegion.totale_casi}</p>
+                            <p class="lead text-white ">Nuovi positivi: ${dataAboutRegion.nuovi_positivi}</p>
+                            <p class="lead text-white ">Deceduti: ${dataAboutRegion.deceduti}</p>
+                            <p class="lead text-white ">Guariti: ${dataAboutRegion.dimessi_guariti}</p>
+                            <p class="lead text-white ">Ricoverati con sintomi: ${dataAboutRegion.ricoverati_con_sintomi}</p>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <p class="mb-0 mt-5 text-main fw-bold">Trend Nuovi Casi</p>
+                            <div id="trendNew" class="d-flex align-items-end plot"></div>
+                        </div>
+                        <div class="col-12">
+                            <p class="mb-0 mt-5 text-main fw-bold">Trend Decessi</p>
+                            <div id="trendDeath" class="d-flex align-items-end plot"></div>
+                        </div>
+                        <div class="col-12">
+                            <p class="mb-0 mt-5 text-main fw-bold">Trend Guariti</p>
+                            <div id="trendRecovered" class="d-flex align-items-end plot"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-6 text-center offset-3 d-inline-block">
-                    <p class="lead ">Totale casi: ${dataAboutRegion.totale_casi}</p>
-                    <p class="lead ">Nuovi positivi: ${dataAboutRegion.nuovi_positivi}</p>
-                    <p class="lead ">Deceduti: ${dataAboutRegion.deceduti}</p>
-                    <p class="lead ">Guariti: ${dataAboutRegion.dimessi_guariti}</p>
-                    <p class="lead ">Ricoverati con sintomi: ${dataAboutRegion.ricoverati_con_sintomi}</p>
-                </div>    
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <p class="mb-0 mt-5 text-main fw-bold">Trend Nuovi Casi</p>
-                    <div id="trendNew" class="d-flex align-items-end plot"></div>
+                `
+                
+                let trendData= sorted.map(el=>el).reverse().filter(el=>el.denominazione_regione==region).map(el=>[el.data,el.nuovi_positivi,el.deceduti,el.dimessi_guariti]);
+                
+                
+                
+                let maxNew = Math.max(...trendData.map(el=>el[1]));
+                let maxDeath = Math.max(...trendData.map(el=>el[2]));
+                let maxRecovered= Math.max(...trendData.map(el=>el[3]));
+                
+                let trendNew = document.querySelector('#trendNew');
+                let trendDeath = document.querySelector('#trendDeath');
+                let trendRecovered = document.querySelector('#trendRecovered');
+                
+                trendData.forEach(el=>{
+                    let divNew = document.createElement('div');
+                    divNew.classList.add('d-inline-block','pin-new');
+                    divNew.style.height=`${100*el[1]/maxNew}%`
+                    trendNew.appendChild(divNew);
+                    
+                    let divDeath = document.createElement('div');
+                    divDeath.classList.add('d-inline-block','pin-death');
+                    divDeath.style.height=`${100*el[2]/maxDeath}%`;
+                    trendDeath.appendChild(divDeath);
+                    
+                    let divRecovered = document.createElement('div');
+                    divRecovered.classList.add('d-inline-block','pin-recovered');
+                    divRecovered.style.height=`${100*el[2]/100}%`;
+                    trendRecovered.appendChild(divRecovered);
+                    
+                })
+                
+                
+                
+            });
+        });
+        
+        
+        
+        
+        
+        let days= Array.from(new Set(sorted.map(el=>el.data))).reverse()
+        
+        document.querySelectorAll('[data-trend').forEach(el=>{
+            el.addEventListener('click',()=>{
+                let set = el.dataset.trend;    
+                let totalsPerDays = days.map(el=>[el,sorted.filter(i=>i.data ==el).map(u=>u[set]).reduce((t,n)=>t+n)])
+                let maxData = Math.max(...totalsPerDays.map(el=>el[1]));
+                modal.classList.add('active');
+                modal.classList.remove('modal-custompoiner');
+                modal.innerHTML = `
+                
+                <div class="container my-5 py-5">
+                    <div class="row">
+                        <div class="col-12">
+                            <p class="lead text-main">${set.replace(/_/g," ").toUpperCase()}</p>
+                        </div>
+                        <div class="col-12">
+                            <div id="totalTrend" class="d-flex align-items-end plot">
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-12">
-                    <p class="mb-0 mt-5 text-main fw-bold">Trend Decessi</p>
-                    <div id="trendDeath" class="d-flex align-items-end plot"></div>
-                </div>
-                <div class="col-12">
-                    <p class="mb-0 mt-5 text-main fw-bold">Trend Guariti</p>
-                    <div id="trendRecovered" class="d-flex align-items-end plot"></div>
-                </div>
-            </div>
-        </div>
-        `
-        
-        let trendData= sorted.map(el=>el).reverse().filter(el=>el.denominazione_regione==region).map(el=>[el.data,el.nuovi_positivi,el.deceduti,el.dimessi_guariti]);
-        
-      
-        
-        let maxNew = Math.max(...trendData.map(el=>el[1]));
-        let maxDeath = Math.max(...trendData.map(el=>el[2]));
-        let maxRecovered= Math.max(...trendData.map(el=>el[3]));
-
-         let trendNew = document.querySelector('#trendNew');
-         let trendDeath = document.querySelector('#trendDeath');
-         let trendRecovered = document.querySelector('#trendRecovered');
-        
-        trendData.forEach(el=>{
-            let divNew = document.createElement('div');
-            divNew.classList.add('d-inline-block','pin-new');
-            divNew.style.height=`${100*el[1]/maxNew}%`
-            trendNew.appendChild(divNew);
-
-            let divDeath = document.createElement('div');
-            divDeath.classList.add('d-inline-block','pin-death');
-            divDeath.style.height=`${100*el[2]/maxDeath}%`;
-            trendDeath.appendChild(divDeath);
-
-            let divRecovered = document.createElement('div');
-            divRecovered.classList.add('d-inline-block','pin-recovered');
-            divRecovered.style.height=`${100*el[2]/100}%`;
-            trendRecovered.appendChild(divRecovered);
-
+                `
+                
+                let totalTrend = document.querySelector('#totalTrend');
+                
+                
+                
+                
+                totalsPerDays.forEach(el=>{
+                    let col = document.createElement('div');
+                    col.classList.add('d-inline-block','pin-new');
+                    col.style.height=`${70*el[1]/maxData}%`
+                    totalTrend.appendChild(col);
+                })
+                
+                
+                
+                
+            })
+            
         })
-
-
-
-      });
-    });
-    
-    
-    window.addEventListener('click',function(e){
-      if(e.target == modal){
-         /*  modal.style.removeProperty('pointer-events'); */
-
-          modal.classList.remove('active');
-          modal.classList.add('modal-custompoiner');
-      }
-           
-    });
-
-    
-    let days= Array.from(new Set(sorted.map(el=>el.data))).reverse()
-
-    document.querySelectorAll('[data-trend').forEach(el=>{
-        el.addEventListener('click',()=>{
-           let set = el.dataset.trend;    
-        let totalsPerDays = days.map(el=>[el,sorted.filter(i=>i.data ==el).map(u=>u[set]).reduce((t,n)=>t+n)])
-        let maxData = Math.max(...totalsPerDays.map(el=>el[1]));
-        modal.classList.add('active');
-        modal.classList.remove('modal-custompoiner');
-        modalContent.innerHTML = `
-       
-        <div class="container my-5 py-5">
-            <div class="row">
-                <div class="col-12">
-                    <p class="lead text-main">${set.replace(/_/g," ").toUpperCase()}</p>
-                </div>
-                <div class="col-12">
-                    <div id="totalTrend" class="d-flex align-items-end plot">
-             
-                    </div>
-                </div>
-            </div>
-        </div>
-       `
-
-       let totalTrend = document.querySelector('#totalTrend');
-      
-      
-     
-       
-      totalsPerDays.forEach(el=>{
-          let col = document.createElement('div');
-          col.classList.add('d-inline-block','pin-new');
-          col.style.height=`${70*el[1]/maxData}%`
-          totalTrend.appendChild(col);
-      })
-
-
-       })
-    })
-
-
-   /*  document.querySelector('#timeTotal').addEventListener('click',()=>{
-    
-      
         
+        
+        
+        
+        
+        
+        
+        
+        window.addEventListener('click',function(e){
+            if(e.target == modal){
+                modal.classList.remove('active');
+                modal.classList.add('modal-custompoiner');
+            }
+            
+        });
+        
+        
+          let pieTrigger = document.querySelector('#pieTrigger')
+        pieTrigger.addEventListener('click',()=>{
 
-        modal.classList.add('active');
-        modal.classList.remove('modal-custompoiner');
-        modalContent.innerHTML = `
-       
-        <div class="container my-5 py-5">
-            <div class="row">
-                <div class="col-12">
-                    <div id="totalTrend" class="d-flex align-items-end plot">
-                            
+            modal.classList.add('active');
+            modal.classList.remove('modal-custompoiner');
+
+            let temp = [];
+            for (let i = 21; i >=1; i--) {
+                
+                let color = `rgba(17,67,153,${(i / 21).toFixed(2)})`;
+                temp.push(color);
+                
+            }
+             let max =lastUpdatedData.map(el=>el.nuovi_positivi).reduce((t,n)=>t+n) 
+
+            let recap = lastUpdatedData.map((el,i)=>[el.denominazione_regione,el.nuovi_positivi,temp[i]]).sort()
+
+            let start = 0;
+            let cumulative = [0,...recap.map(el=>start+= +(360*el[1]/max).toFixed(3))]
+
+            let spreader = cumulative.map((el,i)=>[cumulative[i],cumulative[i+1]]).splice(0,cumulative.length-1).map((el,i)=>[...el,...recap[i]])
+
+            console.log(spreader);
+
+            let final = spreader.map(el=>[el[4],`${el[0]}deg ${el[1]}deg`,...el])
+
+            let valuetoShow = final.map(el=>el[0]).join(",")
+            
+
+            
+
+
+
+
+
+            modal.innerHTML = `
+            <div class="container my-5 py-5">
+                <div class="row justify-content-center align-items-center">
+                   <div class="pieChart"></div>
+
                     </div>
                 </div>
+                 <div id="legend" class="row mt-3">
+
+                </div>   
             </div>
-        </div>
-       `
-      
- 
-       
-    })*/
+            
+            
+            `
+            document.querySelector('.pieChart').style.background = `conic-gradient(${valuetoShow})`
 
-
-
-   
- });
-
+            let legend = document.querySelector('#legend')
+            final.forEach(el=>{
+                let voice = document.createElement('div');
+                voice.classList.add('col-6','col-md-3','mb-3','text-white','p-5');
+                voice.innerHTML = `<p class="small mb-0">${el[4]}: ${el[5]}</p>`
+                voice.style.borderLeft=`4px solid ${el[6]}`
+                legend.appendChild(voice)
+            })
+        })
+        
+         
+        
+         
+        
+    });
+    
 </script>
-</body>
+
 
 </html>
